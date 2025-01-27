@@ -1,0 +1,14 @@
+- hosts: webservers
+  tasks:
+    - name: Install redis-server
+      ansible.builtin.apt:
+        name: redis-server
+        state: present
+        update_cache: yes
+      become: yes
+
+    - name: Remove redis-server
+      ansible.builtin.apt:
+        name: redis-server
+        state: absent
+      become: yes
