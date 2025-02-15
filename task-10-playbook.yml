@@ -1,0 +1,15 @@
+- hosts: servers
+  tasks:
+    - name: Create user
+      ansible.builtin.user:
+        name: vladi
+        state: present
+      become: yes
+      when: ansible_default_ipv4.address == '64.227.131.244'
+    - name: Install git
+      ansible.builtin.apt:
+        name: git
+        state: latest
+        update_cache: yes
+      become: yes
+      when: ansible_default_ipv4.address == '167.71.236.195'
