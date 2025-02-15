@@ -1,0 +1,43 @@
+- hosts: webservers
+  vars:
+    welcome_text: "This is server {{ server_name | upper }}"
+    date: "{{ ansible_date_time.iso8601 }}"  # Убрали ненужный формат
+  tasks:
+    - name: Install cowsay
+      ansible.builtin.apt:
+        name: cowsay
+        state: latest
+        update_cache: yes
+      become: yes
+
+    - name: Run cowsay
+      ansible.builtin.command:
+        cmd: cowsay {{ welcome_text }}
+      register: cowsay
+
+    - name: Install nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: latest
+        update_cache: yes
+      become: yes
+
+    - name: Copy nginx conf
+      ansible.builtin.copy:
+        src: files/nginx.conf
+        dest: /etc/nginx/nginx.conf
+      become: yes
+      notify:
+        - restart nginx
+
+    - name: Copy index.html
+      ansible.builtin.template:
+        src: files/index_12.html.j2
+        dest: /usr/share/nginx/html/index.html
+      become: yes
+
+  handlers:
+    - name: restart nginx
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded
