@@ -1,0 +1,12 @@
+- hosts: webservers
+  vars:
+    root_dir: /usr/share/nginx/html
+    welcome_text: "This is server {{ server_name | upper }}"
+    date: "{{ ansible_date_time.iso8601 | to_datetime('%Y-%m-%dT%H:%M:%SZ') }}"
+  tasks:
+    - name: Copy index.html
+      ansible.builtin.template:
+        src: "files/index_11.html.j2"
+        dest: "{{root_dir}}/index.html"
+      become: yes
+
