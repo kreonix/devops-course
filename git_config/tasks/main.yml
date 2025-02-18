@@ -1,0 +1,21 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for git_config
+
+- name: Create user
+  ansible.builtin.user:
+    name: "{{ username }}"
+    password: "{{ 'password' | password_hash('sha512') }}"
+    state: present
+  become: yes
+- name: Install git
+  ansible.builtin.apt:
+    name: git
+    state: latest
+    update_cache: yes
+  become: yes
+- name: Copy git config
+  ansible.builtin.template:
+    src: files/gitconfig.j2
+    dest: "/home/{{ username }}/.gitconfig"
+  become: yes

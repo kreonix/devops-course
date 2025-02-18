@@ -1,0 +1,7 @@
+- hosts: webservers
+  roles:
+    - role: git_config
+      become: yes
+      vars:
+        username:
+        password:

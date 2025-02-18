@@ -1,0 +1,20 @@
+- hosts: servers
+  roles:
+    - role: geerlingguy.git
+      become: yes
+    - role: geerlingguy.postgresql
+      vars:
+        postgresql_databases:
+          - name: new_db
+            owner: new_user
+        postgresql_users:
+            - name:
+              password:
+      become: yes
+    - role: geerlingguy.nodejs
+      become: yes
+  tasks:
+    - name: Check nodejs
+      ansible.builtin.command: node --version
+      register: node_version
+      failed_when: node_version.rc != 0
